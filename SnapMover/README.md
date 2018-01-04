@@ -1,6 +1,6 @@
 # SnapMover
 
-A simple application that moves "Screen Shot *.png" & "Screenshot*.png" from a source directory to a target directory onclick and automatically.
+A simple application that moves "Screen Shot \*.png" & "Screenshot\*.png" from a source directory to a target directory onclick and automatically.
 
 ## Usage
 
