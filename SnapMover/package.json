@@ -1,0 +1,20 @@
+{
+	"name": "SnapMover",
+	"productName": "SnapMover",
+	"description": "Move screenshots from one place to the next onclick and automatically.",
+	"version": "1.0.0",
+	"main": "main.js",
+	"license": "MIT",
+	"electronVersion": "1.7.9",
+	"devDependencies": {
+		"electron": "^1.7.9",
+		"electron-connect": "^0.6.2"
+	},
+	"dependencies": {
+		"electron-json-storage": "^4.0.2",
+		"node-watch": "^0.5.5"
+	},
+	"build": {
+		"appId": "com.snapmover.app"
+	}
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html style="-webkit-app-region: drag; -webkit-user-select: none;">
+
+	<head>
+		
+		<title>Window</title>
+		
+		<style>
+			
+			html, body {
+				height: 100%;
+				width: 100%;
+				margin: auto;
+				padding: 0;
+				cursor: default;
+			}
+			
+			html * {
+				font-family: sans-serif;
+			}
+			
+			html, body, html * {
+				-webkit-font-smoothing: antialiased;
+				-webkit-font-smoothing: auto;
+			}
+			
+			div:empty {
+				display: none;
+			}
+			
+			label:hover {
+				cursor: pointer !important;
+				opacity: .7;
+			}
+			
+			button {
+				outline: none !important;
+				cursor: pointer;
+			}
+			
+		</style>
+		
+		<script>
+			
+			let api = {
+				remote: require('electron').remote
+			};
+			
+			api.fill = function(options = null) {
+					
+				if (window.source_form) source_form.reset();
+				if (window.target_form) target_form.reset();
+				
+				let after = function(r = {}) {
+					
+					source.innerText = r.source || 'Choose a "source" directory.';
+					target.innerText = r.target || 'Choose a "target" directory.';
+					
+					sync.style.display = r.source && r.target ? 'block' : 'none';
+					
+				};
+				
+				if (options) return after(options);
+				
+				api.remote.getGlobal('api').get(null, after);
+				
+			};
+			
+			api.change = function(e = null, target) {
+				
+				let options = {};
+				
+				options[target.name] = e.target.files[0].path;
+								
+				api.remote.getGlobal('api').set(options, function(c) {
+					
+					api.fill(c);
+					
+				});
+								
+			};
+			
+			api.sync = function() {
+			
+				api.remote.getGlobal('api').sync(null, function(r) {
+					
+					if (r && r.memo) alert(r.memo);
+					
+				});
+				
+			};
+			
+		</script>
+	
+	</head>
+	
+	<body>
+		
+		<table width="100%" height="100%">
+			<tbody>
+				<tr>
+					<td align="center" style="padding: 15px;">
+						
+						<p style="color: #fff;">
+							<span>Automatically moves</span>
+							<b>screenshots</b>
+							<span>from:</span>
+						</p>
+						
+						<form id="source_form">
+							
+							<label title="Click to set source.">
+								<input type="file" style="display: none;" webkitdirectory onchange="api.change(event, this);" name="source" />
+								<span style="color: #fff; font-size: 12px;" id="source">...</span>
+							</label>
+
+						</form>
+						
+						<p style="color: #fff;">
+							<span>To:</span>
+						</p>
+						
+						<form id="target_form">
+							
+							<label title="Click to set target.">
+								<input type="file" style="display: none;" webkitdirectory onchange="api.change(event, this);" name="target" />
+								<span style="color: #fff; font-size: 12px;" id="target">...</span>
+							</label>
+
+						</form>
+						
+						<div id="sync" style="margin-top: 20px; display: none;">
+							
+							<button style="width: 80px; height: 80px; border-radius: 100%; font-weight: bold; background-color: #4CAF50; color: #fff;" type="button" onclick="api.sync();">SYNC</button>
+							
+						</div>
+						
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<footer>
+			
+			<script>api.fill();</script>
+			
+		</footer>
+			
+	</body>
+
+</html>
